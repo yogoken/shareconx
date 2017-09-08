@@ -1,0 +1,44 @@
+%section.con0
+  %div.container
+    %video#welcome-background-movie{:autoplay => true, :loop => true, :playsinline=> true, :muted=>true}
+      %source{:src => "/assets/background1.mp4", :type => "video/mp4"}
+      %source{:src => "/assets/background1.webm", :type => "video/webm"}
+      %source{:src => "/assets/background1.ogv", :type => "video/ogv"}
+
+%section.conA
+  %div.container
+    = image_tag("logo.png")
+    %h1
+      recpost
+    .headline
+      %p.text-write
+        Don't be busy. Be productive.
+    %div.enter_link
+      = link_to "ログイン", new_user_session_path, class: 'btn-entry'
+      = link_to "新規登録", new_user_registration_path, class: 'btn-entry'
+
+    %div.arrow.arrow-1
+    %div.arrow.arrow-2
+
+%section.conB
+  .container
+    %div.text
+      %span.icon{:class => "fa fa-users"}
+      %h2 recpostって何？
+      %p
+        recpost（リクポスト）とは、リクルートの社員のみが利用できる
+        掲示板式の社内匿名SNSです。
+    %div.text
+      %span.icon{:class => "fa fa-rocket"}
+      %h2 「自分」を発信する
+      %p
+        会社をまたいで目指している世界観や大事にしている考えを発信して
+        一人一人のライフストーリを語り合いましょう。
+    %div.text
+      %span.icon{:class => "fa fa-search"}
+      %h2 「仲間」をさがす
+      %p
+        新しい試みも共感してくれる仲間がいると心強いものです。
+        今いる以外の場所でどんな仲間とどんなチームを作りますか？
+%footer
+  = render :partial => 'layouts/footer'

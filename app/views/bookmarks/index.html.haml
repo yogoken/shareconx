@@ -1,0 +1,64 @@
+.container-bookmark
+  .page-title
+    .back_btn
+      = link_to :back do
+        %span.fa.fa-angle-left
+    %h3
+      ブックマーク一覧
+
+  .user_bookmarked_tweets
+    -if @bookmarks.count != 0
+      - @bookmarks.each do |bookmark|
+        - tweet = Tweet.find(bookmark.tweet_id)
+        .list.js-swipeList{id: "#{bookmark.id}-bm-id"}
+          .list-body.js-swipeListTarget
+            .article
+              = link_to '詳細', "/tweets/#{tweet.id}", method: :get, class: "tweet_detail"
+              .post_contents
+                //ここにposition=absoluteで追加する
+                -if tweet.room_id == 1
+                  .room_cd.company_color_default
+                    = @companies.find(tweet.room_id).company_cd
+                -else
+                  .room_cd{:class=>"company_color_#{tweet.company_cd}"}
+                    = @companies.find(tweet.room_id).company_cd
+                %h3.title
+                  =tweet.title
+                %p.tweet_text
+                  = tweet.text
+                %p.nickname
+                  = tweet.nickname
+                  %span.timestamp
+                    ブックマーク登録：
+                    -if (Time.now - bookmark.created_at)/1.day < 3
+                      = time_ago_in_words(bookmark.created_at) + "前"
+                    -else
+                      = bookmark.created_at.strftime("%Y年%m月%d日")
+          .list-btn.js-swipeListBtn
+            %ul
+              %li
+                %a.bookmark-delete-btn{"data-tweetid"=>"#{tweet.id}", "data-bookmarkid"=>"#{bookmark.id}"}
+                  %span.fa.fa-ban
+    -else
+      .tweet-index-no-tweet
+        .no-tweet-contents
+          %p.no-tweet-icon
+            %span.fa.fa-tags
+          %p.no-tweet-message
+            お気に入りがありません。<br>気にいる投稿を探してみましょう！
+
+#checked-modal
+  %p.check-words
+
+#modal-overlay
+#modal
+  .modal-contents
+    %p 削除してよろしいですか
+  %ul.modal-btn-groupe
+    %li
+      %a.modal-close{:href => "#"}
+        %span キャンセル
+    %li
+      %a.modal-delete#delete-modal
+        %span 削除
+.tab-content-end

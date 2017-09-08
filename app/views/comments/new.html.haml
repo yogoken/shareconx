@@ -1,0 +1,13 @@
+.page-title
+  .back_btn
+    = link_to :back do
+      %span.fa.fa-angle-left
+  %h3
+    コメントする
+
+= form_tag("/tweets/#{@tweet.id}/comments", method: :post) do
+  %h3
+    %span Q
+    = @tweet.text
+  %textarea.form-control{:cols => "30", :name => "text", :placeholder => "コンテンツ", :rows => "10", required: "true",}
+  %input.btn.btn-primary{:type => "submit", :value => "SENT"}/

@@ -1,0 +1,18 @@
+!!!
+%html
+  %head
+    %script{:src => "https://use.fontawesome.com/014ec5fd76.js"}
+    %script{:src => "https://code.jquery.com/jquery-2.2.3.min.js"}
+    -# %script{:src => "https://rawgithub.com/WickyNilliams/headroom.js/gh-pages/assets/scripts/main.js"}
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:content => "width=device-width,initial-scale=1.0", :name => "viewport"}/
+    %title ShareCon
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+    = favicon_link_tag('logo_big.png')
+  %body.nohero
+    - if user_signed_in?
+      %header.default
+        = render :partial => 'layouts/header'
+    = yield

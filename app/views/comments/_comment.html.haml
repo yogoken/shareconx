@@ -1,0 +1,53 @@
+.tweet-show-comment-each
+  .list.js-swipeList
+    .comments_detail.list-body.js-swipeListTarget
+      %p.nickname
+        -if comment.tweet.room_id == 1
+          %span.tag{:class=>"company_color_#{comment.company_cd}"}
+            = comment.company_cd
+          %span.comment-nicknames
+            = comment.user_nickname
+        -else
+          %span.comment-nicknames
+            = comment.user_nickname
+      %p.text
+        = comment.text
+      .review
+        .timestamp
+          -if (Time.now - comment.created_at)/1.day < 3
+            = time_ago_in_words(comment.created_at) + "前"
+          -else
+            = comment.created_at.strftime("%Y年%m月%d日")
+        .dots
+          ・
+        .likes
+          - if comment.comment_like_user(current_user.id)
+            .comment_like_button.liked.decrement{"data-commentid"=>"#{comment.id}", "data-tweetid"=>"#{@tweet.id}", "data-commentlikeid"=>"#{comment.comment_likes.find_by(user_id: current_user.id).id}"}
+              %span.fa.fa-thumbs-o-up{id: "#{comment.id}_comment_like_icon"}
+              %span{id: "#{comment.id}_comment_like_text"}
+                Liked
+              %span{id: "#{comment.id}_comment_like_sum"}
+                = comment.comment_likes.count
+          - else
+            .comment_like_button{"data-tweetid"=>"#{@tweet.id}", "data-commentid"=>"#{comment.id}" }
+              %span.fa.fa-thumbs-o-up{id: "#{comment.id}_comment_like_icon"}
+              %span{id: "#{comment.id}_comment_like_text"}
+                Like
+              %span{id: "#{comment.id}_comment_like_sum"}
+                = comment.comment_likes.count
+        .dots
+          ・
+        .comments
+          %a.reply-create-btn{"data-tweetid"=>"#{@tweet.id}", "data-commentid"=>"#{comment.id}", "data-commentnickname"=>"#{comment.user_nickname}", "data-commenttext"=>"#{comment.text}", "data-commentlike"=>"#{comment.comment_likes_count}"}
+            %span.fa.fa-comments-o
+            返信する
+
+    .list-btn.js-swipeListBtn.list-btn-comment
+      -if comment.user_id == current_user.id
+        %ul
+          %li
+            %a.comment-edit-btn{"data-tweetid"=>"#{@tweet.id}", "data-commentid"=>"#{comment.id}"}
+              %span.fa.fa-edit
+          %li
+            %a.comment-delete-btn{"data-id1"=>"#{@tweet.id}", "data-id2"=>"#{comment.id}"}
+              %span.fa.fa-trash

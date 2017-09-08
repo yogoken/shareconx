@@ -1,0 +1,697 @@
+$main-color: rgb(73, 162, 186);
+$accent-color: rgb(36, 39, 42);
+$dark-main-color: rgb(43, 85, 102);
+$text-bright-color: #fff;
+$icon-color: #fff;
+$gray-lv1: rgb(106, 110, 113);
+$gray-lv2: rgb(159, 161, 164);
+$icon-bk-color: rgb(221, 221, 221);
+$large-width: 1000px;
+$white: #fff;
+$grey-lightest: rgb(249, 249, 249);
+$grey-light: #e3e3e3;
+$grey: #e5e5e5;
+$grey-dark: #b9b9b9;
+
+.multipletab{
+  margin:0 auto;
+  background: $grey-lightest;
+  overflow: hidden;
+  position: relative;
+  .tab-buttons{
+    background: rgba(249, 249, 249, 0.9);
+    z-index: 50;
+    width: 100%;
+    position: fixed;
+    height: 60px;
+    transition: all 0.3s linear;
+    -moz-transition: all 0.3s linear;
+    -webkit-transition: all 0.3s linear;
+
+    display:flex;
+    justify-content: space-between;
+    border-bottom:1px solid #ddd;
+    font-weight: 600;
+    font-size: 18px;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    span{
+      width: 50%;
+      padding: 15px 0;
+      display:block;
+      float:left;
+      cursor:pointer;
+      color:#666;
+    }
+    .active{
+      color: $main-color;
+      position:relative;
+      border-bottom: 3px solid $main-color;
+      // box-shadow:0 0 1px rgba(0,0,0,0.5);
+    }
+  }
+}
+.tab-content{
+  position:relative;
+  margin: 60px 0 10px;
+}
+.tab-content-end{
+  margin-bottom: 20px;
+}
+.tweet-index-no-tweet{
+  height: calc(100vh - 110px );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  color: #666;
+  span{
+    font-size: 100px;
+    margin: 20px
+  }
+  p{
+    font-size: 16px;
+    margin: 0;
+  }
+}
+.tab-content>div{
+  position:absolute;
+  color:#666;
+  font-family:'pt sans',sans-serif;
+}
+.tweet-box{
+  margin-bottom: 0px;
+  box-shadow: 0 1px 1px rgba($accent-color,0.2);
+}
+.list{
+  display: table;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  border-bottom: 1px solid #ddd;
+  .list-body{
+    position: relative;
+    z-index: 10;
+    .article{
+      // display: table-cell;
+      width: 100%;
+      background-color: $white;
+      position: relative;
+      .tweet_detail{
+        position: absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height: 100%;
+        text-indent:-999px;
+        &:active, &:focus{
+          background-color: $grey;
+          opacity: 0.2;
+        }
+      }
+      .post_contents{
+        padding: 15px;
+        h3{
+          margin: 0;
+        }
+        p.tweet_text {
+          font-size: 12px;
+          color: $gray-lv2;
+          line-height: 2em;
+          overflow: hidden;
+          height: 28px;
+        }
+        p.nickname{
+          margin: 0;
+          padding: 0;
+          font-size: 14px;
+          color: $main-color;
+          .timestamp{
+            position: absolute;
+            margin-top: 0px;
+            right: 15px;
+            font-size: 14px;
+            color: darkorange;
+          }
+        }
+      }
+      .post_footer{
+        padding: 5px 15px;
+        font-size: 14px;
+        border-top: 1px solid #ddd;
+        display: flex;
+        justify-content: space-between;
+        .count{
+          display: flex;
+          justify-content:flex-start;
+          .contents_count{
+            min-width: 70px;
+          }
+        }
+        .bookmark_flg{
+          .contents_bookmark{
+            min-width: 30px;
+            text-align: center;
+            color: rgb(255, 134, 134);
+          }
+        }
+      }
+    }
+  }
+  .list-btn-comment{
+    margin:0;
+  }
+  .list-btn{
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    ul{
+      display: table;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+      li{
+        text-decoration: none;
+        display: table-cell;
+        height: 100%;
+        padding: 25px;
+        vertical-align: middle;
+        border-left: 1px solid #ddd;
+        a{
+          font-size: 24px;
+          color: #666;
+          &:active, &:focus{
+            background-color: rgba(221, 221, 221, 0.4);
+            opacity: 0.2;
+          }
+        }
+        &:nth-child(1) {
+          background: rgba(255, 255, 230, 0.4);
+        }
+        &:nth-child(2) {
+          background: rgba(238, 238, 255, 0.4);
+        }
+        &:nth-child(3) {
+          background: rgba(255, 235, 244, 0.4);
+        }
+      }
+    }
+  }
+}
+
+.article_detaile{
+  padding: 30px 20px;
+  background-color: #fff;
+  margin: 0px 0 15px;
+  box-shadow: 0 1px 1px rgba($accent-color,0.2);
+  overflow-y: scroll;
+  h3.title{
+    margin: 0;
+  }
+  .article_menu{
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    .tweet_info{
+      p.nickname{
+        margin: 15px 0 0;
+        padding: 0;
+        font-size: 12px;
+        color: $main-color;
+      }
+      p.timestamp{
+        margin: 5px 0;
+        padding: 0 0 15px;
+        font-size: 12px;
+        color: $gray-lv2;
+      }
+    }
+    .tweet_options{
+      display: flex;
+      align-items: center;
+      font-size: 20px;
+      ul{
+        margin: 0;
+        li{
+          float: left;
+          list-style: none;
+          padding: 0 15px 0 20px;
+          color: #666;
+          a#tweet_report_btn{
+            color: #666;
+          }
+          .decrement{
+            color: rgb(255, 134, 134);
+          }
+        }
+      }
+    }
+  }
+
+  p.text {
+    font-size: 14px;
+    color: #333;
+    line-height: 2em;
+    min-height: 48px;
+  }
+  .article_review{
+    margin-top: 15px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    .article_review_content{
+      width: 50%;
+      a{
+        color: #666;
+        text-decoration: none;
+        &:active, &:focus{
+          color: #ddd;
+        }
+      }
+      .decrement{
+        text-decoration: none;
+        span{
+          color: rgb(255, 134, 134);
+        }
+      }
+      .yet-liked{
+        color: #666;
+        text-decoration: none;
+      }
+    }
+    .right{
+      border-left: 1px solid #ddd;
+    }
+  }
+}
+.tweet-show-comments{
+  border-top: 1px solid #ddd;
+  #tweet-show-comment-each-displayNone{
+    display: none;
+  }
+}
+
+#comment-create-modal,
+#reply-create-modal,
+#comment-edit-modal,
+#reply-edit-modal,
+#tweetShow-tweet-edit-modal,
+#violation_report_modal
+{
+  z-index: 100;
+  display: none;
+  width: 100%;
+  box-shadow: 0 1px 1px rgba($accent-color,0.2);
+  background-color: #fafafa;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
+  #least_comment_dispNone{
+    display: none;
+  }
+  .comment-create-modal-header,
+  .reply-create-modal-header,
+  .comment-edit-modal-header,
+  .reply-edit-modal-header,
+  .tweetShow-tweet-edit-modal-header,
+  .violation_report_modal_header{
+    padding: 10px;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    vertical-align: middle;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    a.comment-create-close-btn,
+    a.reply-create-close-btn,
+    a.comment-edit-close-btn,
+    a.reply-edit-close-btn,
+    a.tweetShow-tweet-edit-close-btn,
+    a.violation-report-modal-close-btn{
+      text-decoration: none;
+      color: #666;
+      &:focus, &:active{
+        color: #ddd;
+      }
+    }
+    .violation-report-modal-title{
+      margin: 0;
+    }
+    input.violation_report_submit[type="submit"]{
+      width: 100%;
+      margin: 0px;
+      border: none;
+      color: $main-color;
+      background-color: #fafafa;
+      font-size: 14px;
+      padding: 10px 7px;
+    }
+  }
+  .comment-create-modal-contents{
+    overflow-y: scroll;
+    height: 60vh;
+    padding: 0 10px;
+    .least_comment, .least_reply{
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+      font-size: 14px;
+      p.comment_user_nickname, p.reply_user_nickname{
+        font-size: 10px;
+        color: $main-color;
+        margin: 5px 0;
+        span.timestamp{
+          margin: 5px 0;
+          color: #666;
+        }
+      }
+      p.comment_text, p.reply_text{
+        margin: 5px 0;
+      }
+    }
+  }
+  .reply-create-modal-contents{
+    padding: 30px 20px;
+    .comment-text{
+      margin: 0;
+    }
+    p.right-allign{
+      margin: 0;
+      padding-top:10px;
+      text-align: right;
+      span{
+        margin: 5px 0;
+        font-size: 12px;
+        color: #666;
+      }
+      .comment-nickname{
+        color: $main-color;
+      }
+    }
+  }
+  .violation_report_modal_contents{
+    padding: 0 10px;
+    font-size: 14px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    p.violation_report_tweet_post{
+      margin: 0;
+      padding: 15px;
+    }
+    .top{
+      border-bottom: 1px solid #ddd;
+    }
+  }
+  form{
+    width: 100%;
+    border-top: 1px solid #ddd;
+    background-color: #fafafa;
+    margin: 0;
+    padding: 10px;
+    box-shadow: none;
+    display: table;
+    border-radius: 0 0 10px 10px;
+
+    .comment-text-area,
+    .reply-text-area,
+    .tweet-text-area,
+    .violation_report_reason_textarea{
+      width: 100%;
+      display: table-cell;
+      padding-bottom: 0;
+      vertical-align: bottom;
+      h4{
+        margin: 0;
+      }
+      textarea.comment-text, input.comment-submit,
+      textarea.reply-text, input.reply-submit{
+        background-color: #fafafa;
+        margin: 0 0 -6px 0;
+        padding: 5px;
+        width: 100%;
+        line-height: 1.5em;
+        font-size: 16px;
+        transform: scale(0.9);
+        border: none;
+        border-radius: 0;
+        border-bottom: 1px solid #ddd;
+      }
+      textarea.tweet-text, input.tweet-submit{
+        background-color: #fafafa;
+        margin: 0 0 -6px 0;
+        padding: 5px;
+        width: 100%;
+        line-height: 1.5em;
+        font-size: 16px;
+        transform: scale(0.9);
+      }
+    }
+    .comment-submit-btn,
+    .reply-submit-btn,
+    .tweet-submit-btn{
+      width: 100%;
+      display: table-cell;
+      vertical-align: middle;
+      input.comment-submit[type="submit"],
+      input.reply-submit[type="submit"],
+      input.tweet-submit[type="submit"]{
+        width: 100%;
+        margin: 0px;
+        border-radius: 5px;
+        font-size: 12px;
+        padding: 10px 7px;
+      }
+    }
+  }
+}
+fieldset#violation_report_create{
+  padding: 0;
+  margin: -10px 0 0 0 ;
+  font-size: 16px;
+  width: 100%;
+  transform: scale(0.9);
+  border: none;
+  .violation_report_reason_checkbox{
+    padding: 5px 0;
+    font-size: 16px;
+  }
+  p.optional-message-top{
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+  }
+  p.optional-message{
+    margin: 20px 0 0;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+  }
+  textarea.violation_report_reason_textarea{
+    background-color: #fafafa;
+    // transform: scale(0.8);
+    border: 1px solid #eee;
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 10px 0;
+    line-height: 1.5em;
+  }
+}
+
+
+
+#tweet-show-option-modal{
+  z-index: 100;
+  display: none;
+  width: 90%;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-size: 22px;
+  .modal-contents{
+    background-color: #fafafa;
+    border: 1px solid #999;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    div a{
+      text-decoration: none;
+    }
+    .tweet-show-tweetEdit{
+      padding: 15px;
+      a{
+        color: #666;
+      }
+    }
+    .tweet-show-tweetDelete{
+      padding: 15px;
+      border-top: 1px solid #999;
+      a{
+        color: rgb(255, 98, 98);
+      }
+    }
+  }
+  .tweet-show-option-close-btn{
+    color: #666;
+    padding: 15px;
+    background-color: #fafafa;
+    border: 1px solid #999;
+    border-radius: 15px;
+    margin-bottom: 10px;
+  }
+}
+#checked-modal{
+  z-index: 100;
+  display: none;
+  width: 75%;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 20px;
+  position: fixed;
+  text-align: center;
+  background-color: rgba(102, 102, 102, 0.6);
+  p{
+    margin: 0;
+    font-size: 16px;
+    color: #fff;
+    padding: 10px;
+  }
+}
+
+#modal-overlay, #modal {
+  z-index: 100;
+  display: none;
+}
+#modal-overlay {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(221, 221, 221, 0.8);
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+#modal {
+  width: 90%;
+  background-color: #fafafa;
+  position: fixed;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px 0 0;
+  border-radius: 2px;
+  .modal-contents {
+    margin: 20px 0;
+    text-align: center;
+  }
+  .modal-btn-groupe {
+    text-align: center;
+    font-size: 14px;
+    padding: 15px 0;
+    border-top: 1px solid #ddd;
+    letter-spacing: -.40em;
+    li {
+      display: inline-block;
+      letter-spacing: normal;
+      width: 100px;
+      &:first-child {
+        margin: 0 15px 0 0;
+      }
+      a {
+        display: block;
+        padding: 8px 0;
+        text-decoration: none;
+        border-radius: 5px;
+      }
+      a.modal-close {
+        background-color: rgba(249, 249, 249, 0.6);
+        border: 1px solid #ddd;
+        color: #666;
+        &:active{
+          background-color: rgba(159, 161, 164, 0.5);
+        }
+      }
+      a.modal-delete {
+        background-color: rgba(73, 162, 186, 0.6);
+        border: 1px solid rgb(73, 162, 186);
+        color: #fafafa;
+        &:active{
+          background-color: rgba(73, 162, 186, 0.9);
+        }
+      }
+    }
+  }
+}
+
+.tweet_edit{
+  margin: 10px 0 0;
+}
+.tweet-show-no-tweet{
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  color: #666;
+  span{
+    font-size: 80px;
+    margin: 20px
+  }
+  p.no-tweet-icon{
+    margin: 0;
+  }
+  p.no-tweet-message{
+    margin: 0 0 20px;
+    font-size: 16px;
+  }
+}
+.room-select-form{
+  h4{
+    margin: 10px 0 0;
+  }
+  .room-select{
+    input[type=radio] {
+      display: none;
+    }
+    margin: 5px 0 20px;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    .radio-inline__input {
+      position: absolute !important;
+    }
+
+    .radio-inline__label {
+      display: inline-block;
+      background: rgba(159, 161, 164, 0.2);
+      border-radius: 3px;
+      transition: all .2s;
+      width: 45%;
+      padding: 12px;
+    }
+
+    .radio-inline__input:checked + .radio-inline__label {
+        background: rgba(73, 162, 186, 0.9);
+        color: #fff;
+        text-shadow: 0 0 1px rgba(0,0,0,.7);
+    }
+  }
+}

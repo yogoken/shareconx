@@ -1,0 +1,303 @@
+.page-title
+  .back_btn
+    = link_to :root do
+      %span.fa.fa-angle-left
+  %h3
+    投稿
+  -if @tweet.user_id == current_user.id
+    .user_setting
+      %a.tweet_show_option_btn{"data-tweetid"=>"#{@tweet.id}"}
+        …
+
+.article_detaile
+  %h3.title#tweetShow-tweet-edited-title
+    = @tweet.title
+  .article_menu
+    .tweet_info
+      %p.nickname
+        -if @tweet.room_id == 1
+          %span.tag{:class=>"company_color_#{@tweet.company_cd}"}
+            = @tweet.company_cd
+          = @tweet.nickname
+        -else
+          = @tweet.nickname
+      %p.timestamp
+        -if (Time.now - @tweet.created_at)/1.day < 3
+          = time_ago_in_words(@tweet.created_at) + "前"
+        -else
+          = @tweet.created_at.strftime("%Y年%m月%d日")
+    .tweet_options
+      %ul
+        %li
+          - if @tweet.tweet_violation_flg(current_user.id)
+            %span.decrement
+              %span.fa.fa-flag-o
+          - else
+            %a#tweet_report_btn{"data-tweetid"=>"#{@tweet.id}", "data-userid"=>"#{current_user.id}",  "data-tweetusername"=>"#{@tweet.nickname}", "data-tweettitle"=>"#{@tweet.title}"}
+              %span.fa.fa-flag-o
+        %li
+          - if @tweet.tweet_bookmark_user(current_user.id)
+            #tweet_bookmark_btn.decrement{"data-userid"=>"#{current_user.id}", "data-tweetid"=>"#{@tweet.id}", "data-tweetbookmarkid"=>"#{@tweet_bookmark.id}"}
+              %span.fa.fa-bookmark.bookmark_icon
+          - else
+            #tweet_bookmark_btn{"data-userid"=>"#{current_user.id}", "data-tweetid"=>"#{@tweet.id}"}
+              %span.fa.fa-bookmark-o.bookmark_icon
+
+  %p.text#tweetShow-tweet-edited-text
+    = @tweet.text
+
+  .article_review
+    .article_review_content.article_review_tweet_likes
+      - if @tweet.tweet_like_user(current_user.id)
+        #tweet_like_button.decrement{"data-tweetid"=>"#{@tweet.id}", "data-tweetlikeid"=>"#{@tweet_like.id}"}
+          %span.fa.fa-thumbs-o-up
+          %span#tweet_like_text
+            Liked
+          %span#tweet_like_sum
+            = tweet_likes_counter(@tweet_likes)
+      - else
+        #tweet_like_button{"data-tweetid"=>"#{@tweet.id}"}
+          %span.fa.fa-thumbs-o-up
+          %span#tweet_like_text
+            Like
+          %span#tweet_like_sum
+            = tweet_likes_counter(@tweet_likes)
+    .article_review_content.right
+      %a.comment-create-btn{"data-id1"=>"#{@tweet.id}"}
+        %span.fa.fa-comments-o
+        コメントする
+
+.tweet-show-comments
+  #tweet-show-comment-each-displayNone.tweet-show-comment-each
+    .list.js-swipeList
+      .list-body.js-swipeListTarget.comments_detail
+        %p.nickname
+          -if @tweet.room_id != current_user.company_id
+            %span.tag{:class=>""}
+          %span.comment-nicknames
+        %p.text
+        .review
+          .timestamp
+
+          .dots
+            ・
+          .likes
+            .comment_like_button
+              %a.momentCreateBtn
+                %span.fa.fa-thumbs-o-up
+                %span
+                  Like
+                %span
+                  0
+          .dots
+            ・
+          .comments
+            %a.reply-create-btn
+              %span.fa.fa-comments-o
+              返信する
+
+      .list-btn.js-swipeListBtn.list-btn-comment
+        %ul
+          %li
+            %a.comment-edit-btn{"data-method"=> "get", :href=>""}
+              %span.fa.fa-edit
+          %li
+            %a.comment-delete-btn{"data-id1"=>"", "data-id2"=>""}
+              %span.fa.fa-trash
+  =render @feed_contents
+
+//コメント・返信作成用のモーダル機能を追加する
+// コメント作成モーダル
+#modal-overlay
+#comment-create-modal
+  .comment-create-modal-header
+    .likes-counts
+      この投稿のいいね数：
+      %span.fa.fa-thumbs-o-up
+      %span#comment-create-tweet-like
+        = tweet_likes_counter(@tweet_likes)
+      人
+    %a.comment-create-close-btn{:href => "#"}
+      閉じる
+  .comment-create-modal-contents
+    #least_comment_dispNone
+      %p.comment_text
+        -# = comment.text
+      %p.comment_user_nickname
+        -# = comment.user_nickname
+        %span.timestamp
+
+    - @least_comments.each do |comment|
+      .least_comment
+        %p.comment_text
+          = comment.text
+        %p.comment_user_nickname
+          = comment.user_nickname
+          %span.timestamp
+            ・
+            -if (Time.now - comment.created_at)/1.day <= 1
+              = time_ago_in_words(comment.created_at) + "前"
+            -else
+              = comment.created_at.strftime("%Y年%m月%d日")
+
+  .comments_form
+    = form_tag("/tweets/#{@tweet.id}/comments", method: :post, id: "comment-create", name: "commentCreateForm") do
+      .comment-text-area
+        %textarea.comment-text#comment-text{:name => "text", :placeholder => "コメントする...", required: "true", autofocus: "true"}
+      .comment-submit-btn
+        %input.comment-submit{:type => "submit", :value => "投稿する"}/
+
+// 返信作成モーダル
+#modal-overlay
+#reply-create-modal
+  .reply-create-modal-header
+    .likes-counts
+      このコメントのいいね数：
+      %span.fa.fa-thumbs-o-up
+      %span#reply-create-comment-like
+        0
+      人
+    %a.reply-create-close-btn{:href => "#"}
+      閉じる
+  .reply-create-modal-contents
+    %p.comment-text#reply-create-comment-text
+    %p.right-allign
+      %span.comment-nickname#reply-create-comment-nickname
+      %span
+        さんのコメント
+  .replies_form
+    = form_tag("", method: :post, id: "reply-create", name: "replyCreateForm") do
+      .reply-text-area
+        %textarea.reply-text#reply-text{:name => "text", :placeholder => "このコメントに返信する...", required: "true", autofocus: "true"}
+      .reply-submit-btn
+        %input.reply-submit{:type => "submit", :value => "返信する"}/
+
+//コメント編集モーダル
+#modal-overlay
+#comment-edit-modal
+  .comment-edit-modal-header
+    .likes-counts
+      コメントを編集
+    %a.comment-edit-close-btn{:href => "#"}
+      閉じる
+  .replies_form
+    = form_tag("", method: :patch, id: "comment-edit") do
+      .reply-text-area
+        %textarea.reply-text#comment-edit-text{:name => "text", type: "text", required: "true", rows: "5", autofocus: "true"}
+      .reply-submit-btn
+        %input.reply-submit#comment-edit-submit{:type => "submit", :value => "編集する"}/
+
+//返信編集モーダル
+#modal-overlay
+#reply-edit-modal
+  .reply-edit-modal-header
+    .likes-counts
+      返信を編集
+    %a.reply-edit-close-btn{:href => "#"}
+      閉じる
+  .replies_form
+    = form_tag("", method: :patch, id: "reply-edit") do
+      .reply-text-area
+        %textarea.reply-text#reply-edit-text{:name => "text", type: "text", required: "true", rows: "5", autofocus: "true"}
+      .reply-submit-btn
+        %input.reply-submit#reply-edit-submit{:type => "submit", :value => "編集する"}/
+
+// tweet-show ツイート編集モーダル
+#modal-overlay
+#tweetShow-tweet-edit-modal
+  .tweetShow-tweet-edit-modal-header
+    .likes-counts
+      ツイートを編集
+    %a.tweetShow-tweet-edit-close-btn{:href => "#"}
+      閉じる
+  .replies_form
+    = form_tag("", method: :patch, id: "tweetShow-tweet-edit") do
+      .tweet-text-area
+        %h4 タイトル
+        %textarea.tweet-text#tweetShow-tweet-edit-title{:name => "title", type: "text", required: "true", rows: "2", autofocus: "true"}
+        %h4 コンテンツ
+        %textarea.tweet-text#tweetShow-tweet-edit-text{:name => "text", type: "text", required: "true", rows: "5"}
+      .tweet-submit-btn
+        %input.tweet-submit#tweetShow-tweet-edit-submit{:type => "submit", :value => "編集する"}/
+
+#modal-overlay
+#tweet-show-option-modal
+  .modal-contents
+    .tweet-show-tweetEdit
+      %a#tweet-show-tweetEdit{"data-tweetid"=>"", "data-tweettext"=>"#{@tweet.text}", "data-tweettitle"=>"#{@tweet.title}"}
+        編集する
+    .tweet-show-tweetDelete
+      %a#tweet-show-tweetDelete{"data-tweetid"=>""}
+        削除する
+  .tweet-show-option-close-btn
+    キャンセル
+
+#checked-modal
+  %p.check-words
+  %p#countdown
+    %span.countdown-num
+
+// violation report modal
+#modal-overlay
+#violation_report_modal
+  .violation_report_modal_header
+    %a.violation-report-modal-close-btn{:href => "#"}
+      閉じる
+    %p.violation-report-modal-title
+      通報する
+    %fomr#violationReportCreateForm{:action=>"", :method=>""}
+      %input.violation_report_submit{:type => "submit", :value => "通報"}/
+  .violation_report_modal_contents
+    %p.violation_report_tweet_post.top
+      投稿者：
+      %span#violation_reported_user_name
+    %p.violation_report_tweet_post
+      タイトル：
+      %span#violation_reported_tweet_title
+
+  = field_set_tag("", method: :post, id: "violation_report_create", name: "violationReportCreateForm") do
+    .violation_report_reason
+      %p.optional-message-top
+        通報理由
+      .violation_report_reason_checkbox
+        %label
+          %input#violation_report_radio_01{:type => "radio", :name => "option", :value=>"事業会社内の機密事項"}
+          事業会社内の機密事項
+      .violation_report_reason_checkbox
+        %label
+          %input#violation_report_radio_02{:type => "radio", :name => "option", :value=>"不適切な扇動"}
+          不適切な扇動
+      .violation_report_reason_checkbox
+        %label
+          %input#violation_report_radio_04{:type => "radio", :name => "option", :value=>"個人のプライバシー侵害"}
+          個人のプライバシー侵害
+      .violation_report_reason_checkbox
+        %label
+          %input#violation_report_radio_05{:type => "radio", :name => "option", :value=>"倫理的秩序に反するコンテンツ"}
+          倫理的秩序に反するコンテンツ
+      .violation_report_reason_checkbox
+        %label
+          %input#violation_report_radio_05{:type => "radio", :name => "option", :value=>"スパムや不適切な広告宣伝活動"}
+          スパムや不適切な広告宣伝活動
+      .violation_report_reason_checkbox
+        %label
+          %input#violation_report_radio_05{:type => "radio", :name => "option", :value=>"その他"}
+          その他
+      %p.optional-message
+        説明が必要な場合（任意）
+      %textarea.violation_report_reason_textarea{:name => "text", :placeholder => "詳細理由を教えてください", :rows => 4}
+
+//削除確認用モーダル
+#modal-overlay
+#modal
+  .modal-contents
+    %p 削除してよろしいですか
+  %ul.modal-btn-groupe
+    %li
+      %a.modal-close{:href => "#"}
+        %span キャンセル
+    %li
+      %a.modal-delete#delete-modal{"data-method"=> "delete", :href =>""}
+        %span 削除
+
+.tab-content-end

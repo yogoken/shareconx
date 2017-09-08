@@ -1,0 +1,25 @@
+$main-color: rgb(73, 162, 186);
+$accent-color: rgb(36, 39, 42);
+$dark-main-color: rgb(43, 85, 102);
+$text-bright-color: #fff;
+$icon-color: #fff;
+$gray-lv1: rgb(106, 110, 113);
+$gray-lv2: rgb(159, 161, 164);
+$icon-bk-color: rgb(221, 221, 221);
+$large-width: 1000px;
+
+#error_explanation{
+  h2{
+    display: none;
+  }
+  ul{
+    margin: 0;
+    padding: 0;
+    li{
+      list-style: none;
+      padding: 5px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid $main-color;
+    }
+  }
+}

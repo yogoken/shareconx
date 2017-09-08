@@ -1,0 +1,42 @@
+$main-color: rgb(73, 162, 186);
+$accent-color: rgb(36, 39, 42);
+$dark-main-color: rgb(43, 85, 102);
+$text-bright-color: #fff;
+$icon-color: #fff;
+$gray-lv1: rgb(106, 110, 113);
+$gray-lv2: rgb(159, 161, 164);
+$icon-bk-color: rgb(221, 221, 221);
+$large-width: 1000px;
+$white: #fff;
+$grey-lightest: #f9f9f9;
+$grey-light: #e3e3e3;
+$grey: #e5e5e5;
+$grey-dark: #b9b9b9;
+
+$R-group: rgb(166, 166, 167);
+$RHD: rgb(5, 98, 173);
+$RSC: rgb(110, 187, 55);
+$RMP: rgb(249, 0, 129);
+$RCR: rgb(219, 49, 38);
+$RJB: rgb(247, 206, 69);
+$RLS: rgb(235, 86, 40);
+$RTC: rgb(189, 5, 188);
+$RCO: rgb(40, 197, 198);
+
+.container-bookmark {
+  overflow: hidden;
+  margin:0;
+  .user_bookmarked_tweets{
+    .room_cd{
+      position: absolute;
+      width: 70px;
+      text-align: center;
+      top: 0;
+      right: 0;
+      padding: 5px 10px;
+      font-size: 12px;
+      border-radius: 0 0 0 10px;
+
+    }
+  }
+}

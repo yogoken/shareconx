@@ -1,0 +1,43 @@
+$main-color: rgb(73, 162, 186);
+$accent-color: rgb(36, 39, 42);
+$dark-main-color: rgb(43, 85, 102);
+$text-bright-color: #fff;
+$icon-color: #fff;
+$gray-lv1: rgb(106, 110, 113);
+$gray-lv2: rgb(159, 161, 164);
+$icon-bk-color: rgb(221, 221, 221);
+$large-width: 1000px;
+$white: #fff;
+$grey-lightest: rgb(249, 249, 249);
+$grey-light: #e3e3e3;
+$grey: #e5e5e5;
+$grey-dark: #b9b9b9;
+
+.replies_detail{
+  font-family: 'メイリオ', sans-serif;
+  background-color: rgb(249, 249, 249);
+  border-top: 1px solid #ddd;
+  padding: 15px 0;
+  margin: -1px 0 0px 30px;
+  position: relative;
+  // border-left: 1px solid #ddd;
+  p.nickname{
+    color: $main-color;
+    margin: 0;
+    font-size: 12px;
+  }
+  p.text{
+    font-size: 14px;
+    margin: 10px 0;
+    line-height: 2em;
+  }
+  .review{
+    display: table;
+    color: #666;
+    .timestamp{
+      display: table-cell;
+      vertical-align: middle;
+      font-size: 10px;
+    }
+  }
+}

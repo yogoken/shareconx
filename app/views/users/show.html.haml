@@ -1,0 +1,228 @@
+.container-user
+  .page-title
+    .back_btn
+      = link_to :back do
+        %span.fa.fa-angle-left
+    %h3
+      マイページ
+  .log_out
+    %a{"data-method" => "delete", :href => "/users/sign_out", :rel => "nofollow"}
+      ログアウト
+
+  .account_info
+    = image_tag("neuralink_bg.png", class: "header-image")
+    .main-heading
+      %h1
+        %span#updated-nickname
+          = @nickname
+        %span.nickname
+          さん
+      %p.company
+        %span.tag#updated-company{:class=>"company_color_#{current_user.company.company_cd}"}
+          = current_user.company.company_full_name
+      %p.email
+        %span#updated-email
+          = current_user.email
+  .account_info_contents
+    %p.account_info_title
+      レビュー
+    .review_count_total
+      .review_count
+        %a
+          %span.fa.fa-thumbs-o-up
+        %p
+          いいね！された数：
+        .counter
+          = @likes_counts
+    .review_count_total.down
+      .review_count
+        %a
+          %span.fa.fa-comments
+        %p
+          コメントされた数：
+        .counter
+          = @cr_counts
+  .account_info_contents
+    %p.account_info_title
+      ユーザー情報変更
+    -if current_user.company_updated_at
+      -if (Time.now - current_user.company_updated_at)/1.days < 90
+        .user_info_update_total.user-company-update-deactive
+          %a.user_info_update.upside.user_info_company
+            %span.fa.fa-building-o
+            %p.title
+              事業会社
+            %p.comment#company-updated-message
+              = (current_user.company_updated_at + 91.days).strftime("%Y年%m月%d日") + "以降に変更することができます"
+      -else
+        .user_info_update_total.company-info-update
+          %a.user_info_update.upside.user_info_company{"data-userid"=>"#{current_user.id}", "data-currentcompany"=>"#{current_user.company_id}", "data-currentcompanycd"=>"#{current_user.company.company_cd}", "data-timestamp"=>"#{(Time.now + 91.days).strftime("%Y年%m月%d日")}"}
+            %span.fa.fa-building-o
+            %p.title
+              事業会社
+            %p.comment#company-updated-message
+              3ヶ月に1回変更することができます
+    -else
+      .user_info_update_total.company-info-update
+        %a.user_info_update.upside.user_info_company{"data-userid"=>"#{current_user.id}", "data-currentcompany"=>"#{current_user.company_id}", "data-currentcompanycd"=>"#{current_user.company.company_cd}", "data-timestamp"=>"#{(Time.now + 91.days).strftime("%Y年%m月%d日")}"}
+          %span.fa.fa-building-o
+          %p.title
+            事業会社
+          %p.comment#company-updated-message
+            3ヶ月に1回変更することができます
+
+    .user_info_update_total
+      %a.user_info_update.down.user_info_nickname{"data-userid"=>"#{current_user.id}", "data-currentnickname"=>"#{@nickname}"}
+        %span.fa.fa-font
+        %p.title
+          ニックネーム
+      %a.user_info_update.down.left.user_info_email{"data-userid"=>"#{current_user.id}", "data-currentemail"=>"#{current_user.email}"}
+        %span.fa.fa-envelope-o
+        %p.title
+          メールアドレス
+
+
+    %p.account_info_title
+      過去の投稿
+      %span.sub_title
+        （最新投稿5件）
+  .user_tweets
+    -if @tweets_limited.count != 0
+      - @tweets_limited.each do |tweet|
+        .list.js-swipeList
+          .list-body
+            .article
+              = link_to '詳細', "/tweets/#{tweet.id}", method: :get, class: "tweet_detail"
+              .post_contents
+                //ここにposition=absoluteで追加する
+                -if tweet.room_id == 1
+                  .room_cd.company_color_default
+                    = @companies.find(tweet.room_id).company_cd
+                -else
+                  .room_cd{:class=>"company_color_#{@companies.find(tweet.room_id).company_cd}"}
+                    = @companies.find(tweet.room_id).company_cd
+                %h3.title
+                  =tweet.title
+                %p.tweet_text
+                  = tweet.text
+                %p.nickname
+                  = tweet.nickname
+                  %span.timestamp
+                    -if (Time.now - tweet.created_at)/1.day < 3
+                      = time_ago_in_words(tweet.created_at) + "前"
+                    -else
+                      = tweet.created_at.strftime("%Y年%m月%d日")
+    -else
+      .tweet-show-no-tweet
+        %p.no-tweet-icon
+          %span.fa.fa-newspaper-o
+        %p.no-tweet-message
+          あなたの投稿がありません。<br>投稿を上げてみましょう！
+
+#modal-overlay
+#user-company-edit-modal
+  .modal-header
+    %p 事業会社を変更
+    %a.user-edit-modal-close-btn{:href => "#"}
+      閉じる
+  .user-company-edit-modal-contents
+    %p.contents-title
+      現在の事業会社
+    %p#user-current-company{class: "company_color_side_#{current_user.company.company_cd}"}
+      = current_user.company.company_full_name
+    %p.contents-title.second
+      変更後の事業会社
+    .user-company-form
+      = form_tag("", method: :patch, id: "user-company-update", name: "userCompanyUpdateForm") do
+        .company-select
+          = select_tag 'company-update-select', options_from_collection_for_select(Company.where('id > 1'), :id, :company_full_name), {prompt: "会社を選択してください", required: "true"}
+        %p#selected-confirmation
+        .company-submit-btn
+          %input.company-submit#company-edit-submit-btn{:type => "submit", :value => "変更する"}/
+
+#modal-overlay
+#user-nickname-edit-modal
+  .modal-header
+    %p ニックネームを変更
+    %a.user-edit-modal-close-btn{:href => "#"}
+      閉じる
+  .user-nickname-edit-modal-contents
+    %p.contents-title
+      現在のニックネーム
+    %p#user-current-nickname
+      = current_user.nickname
+    %p.contents-title.second
+      変更後のニックネーム
+    %p.nickname-confirmation
+      %span#fa-validation
+      %span#nickname-confirmation-meesage
+        自身を特定できるニックネームはお控えください
+    .bar-animation
+    .user-nickname-form
+      = form_tag("", method: :patch, id: "user-nickname-update", name: "userNicknameUpdateForm") do
+        .nickname-text-area
+          %textarea.user-nickname-update-text#user-nickname-update-text{:name => "nickname-text-area",  :placeholder => "新しいニックネーム", required: "true", autofocus: "true"}
+          %a#nickname-avail-check-btn
+            チェック
+        %p.varidation-conditions-title
+          必要条件
+        %p.varidation-conditions
+          ・4文字以上16文字以下
+        .nickname-submit-btn
+          %input.nickname-submit#nickname-edit-submit-btn{:type => "submit", :value => "変更する"}/
+
+#modal-overlay
+#user-email-edit-modal
+  .modal-header
+    %p メールアドレスを変更
+    %a.user-edit-modal-close-btn{:href => "#"}
+      閉じる
+  .user-email-edit-modal-contents
+    %p.contents-title
+      現在のメールアドレス
+    %p#user-current-email
+      = current_user.email
+    %p.contents-title.second
+      変更後のメールアドレス
+    %p.email-confirmation
+      %span#fa-validation
+      %span#email-confirmation-meesage
+        社用メールアドレスのみご利用いただけます
+    .bar-animation
+    .user-email-form
+      = form_tag("", method: :patch, id: "user-email-update", name: "userEmailUpdateForm") do
+        .email-text-area
+          %textarea.user-email-update-text#user-email-update-text{:name => "email-text-area",  :placeholder => "新しいメールアドレス", required: "true", autofocus: "true"}
+          %a#email-avail-check-btn
+            チェック
+        %p.varidation-conditions-title
+          必要条件（以下のいずれ）
+        %p.varidation-conditions
+          %span#r-recruit
+            ・メールドメイン：r.recruit.co.jp
+          <br/>
+          %span#waku-2
+            ・メールドメイン：waku-2.co.jp
+        .email-submit-btn
+          %input.email-submit#email-edit-submit-btn{:type => "submit", :value => "変更する"}/
+
+#modal-overlay
+#confirmation-modal
+  .modal-contents
+    %p.confirmation-message-title
+      確認
+    %p.confirmation-message
+      一度ログアウトされます。<br/ >再度設定されたメールアドレスでログインし直してください。よろしいですか？
+  %ul.modal-btn-groupe
+    %li
+      %a.email-confirmation-modal-close{:href => "#"}
+        %span キャンセル
+    %li
+      %a.modal-logout#logout-modal
+        %span OK
+#checked-modal
+  %p.check-words
+  %p#countdown
+    %span.countdown-num
+
+.tab-content-end

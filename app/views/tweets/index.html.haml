@@ -1,0 +1,121 @@
+-if current_user.sign_in_count == 1
+  %p
+.multipletab
+  .tab-buttons.tab.default
+    %span#content1
+      =current_user.company.company_cd
+    %span#content2
+      Timeline
+  .tab-content
+    #content1
+      -if @tweets_x.count != 0
+        - @tweets_x.each do |tweet|
+          .list.js-swipeList.tweet-box
+            .list-body.js-swipeListTarget
+              .article.tweet_detail_for_pv{"data-pvtweetid"=>"#{tweet.id}"}
+                = link_to '詳細', "/tweets/#{tweet.id}", method: :get, class: "tweet_detail"
+                .post_contents
+                  %h3.title
+                    = tweet.user.nickname
+                    さんが募集を作りました
+                  -#%p.tweet_text
+                  -#  = tweet.text
+                  %p.nickname
+                    = "@#{tweet.user.nickname}: #{tweet.title}"
+                    %span.timestamp
+                      -if (Time.now - tweet.created_at)/1.day < 3
+                        = "残り時間 5分 30秒"
+                        -#= time_ago_in_words(tweet.created_at) + "前"
+                      -else
+                        = tweet.created_at.strftime("%Y年%m月%d日")
+                .post_footer
+                  .count
+                    .contents_count
+                      %span.fa.fa-eye
+                      = tweet.pvs.count
+                    .contents_count
+                      %span.fa.fa-thumbs-o-up
+                      = tweet.tweet_likes.count
+                    .contents_count
+                      %span.fa.fa-comments-o
+                      = tweet.comments.count + tweet.replies.count
+                  - if tweet.tweet_bookmark_user(current_user.id)
+                    .bookmark_flg
+                      .contents_bookmark
+                        %span.fa.fa-bookmark
+
+            .list-btn.js-swipeListBtn
+              -if tweet.user_id == current_user.id
+                %ul
+                  %li
+                    %a.tweet-delete-btn{"data-id"=>"#{tweet.id}"}
+                      %span.fa.fa-trash
+      -else
+        .tweet-index-no-tweet
+          .no-tweet-contents
+            %p.no-tweet-icon
+              %span.fa.fa-newspaper-o
+            %p.no-tweet-message
+              まだ投稿がありません。<br>あなたが一人目になりましょう！
+
+    #content2
+      -if @tweets_1.count != 0
+        - @tweets_1.each do |tweet|
+          .list.js-swipeList.tweet-box
+            .list-body.js-swipeListTarget
+              .article.tweet_detail_for_pv{"data-pvtweetid"=>"#{tweet.id}"}
+                = link_to '詳細', "/tweets/#{tweet.id}", method: :get, class: "tweet_detail"
+                .post_contents
+                  %h3.title
+                    =tweet.title
+                  %p.tweet_text
+                    = tweet.text
+                  %p.nickname
+                    %span.tag{:class=>"company_color_#{tweet.company_cd}"}
+                      = tweet.company_cd
+                    = tweet.nickname
+                    %span.timestamp
+                      -if (Time.now - tweet.created_at)/1.day < 3
+                        = time_ago_in_words(tweet.created_at) + "前"
+                      -else
+                        = tweet.created_at.strftime("%Y年%m月%d日")
+                .post_footer
+                  .count
+                    .contents_count
+                      %span.fa.fa-eye
+                      = tweet.pvs.count
+                    .contents_count
+                      %span.fa.fa-thumbs-o-up
+                      = tweet.tweet_likes.count
+                    .contents_count
+                      %span.fa.fa-comments-o
+                      = tweet.comments.count + tweet.replies.count
+                  - if tweet.tweet_bookmark_user(current_user.id)
+                    .bookmark_flg
+                      .contents_bookmark
+                        %span.fa.fa-bookmark
+            .list-btn.js-swipeListBtn
+              -if tweet.user_id == current_user.id
+                %ul
+                  %li
+                    %a.tweet-delete-btn{"data-id"=>"#{tweet.id}"}
+                      %span.fa.fa-trash
+      -else
+        .tweet-index-no-tweet
+          .no-tweet-contents
+            %p.no-tweet-icon
+              %span.fa.fa-newspaper-o
+            %p.no-tweet-message
+              まだ投稿がありません。<br>あなたが一人目になりましょう！
+
+#modal-overlay
+#modal
+  .modal-contents
+    %p 削除してよろしいですか
+  %ul.modal-btn-groupe
+    %li
+      %a.modal-close{:href => "#"}
+        %span キャンセル
+    %li
+      %a.modal-delete#delete-modal{"data-method"=> "delete", :href =>""}
+        %span 削除

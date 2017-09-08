@@ -1,0 +1,27 @@
+.page-title
+  .back_btn
+    = link_to :back do
+      %span.fa.fa-angle-left
+  %h3
+    投稿する
+
+.container
+  = form_tag('/tweets', method: :post) do
+    %input.form-control{:name => "title", :placeholder => "タイトル（16文字以内）", :type => "text", required: "true", maxlength: "16"}/
+
+    .room-select-form
+      %h4
+        投稿先を選択してください
+      .room-select
+        %input.radio-inline__input#item-1{:name => "room_id", :value => "#{current_user.company_id}", :type => "radio", checked: "checked"}
+        %label.radio-inline__label{:for => "item-1"}
+          = current_user.company.company_cd
+        %input.radio-inline__input#item-2{:name => "room_id", :value => "1", :type => "radio"}
+        %label.radio-inline__label{:for => "item-2"}
+          Recruit All
+
+
+    %textarea.form-control{:cols => "30", :name => "text", :placeholder => "コンテンツ", :rows => "5", required: "true",}
+    %input.btn.btn-primary{:type => "submit", :value => "SENT"}/
+
+.tab-content-end

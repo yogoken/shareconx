@@ -1,0 +1,26 @@
+.list.js-swipeList
+  .replies_detail.list-body.js-swipeListTarget
+    %p.nickname
+      -if reply.tweet.room_id == 1
+        %span.tag{:class=>"company_color_#{reply.company_cd}"}
+          = reply.company_cd
+        = reply.user_nickname
+      -else
+        = reply.user_nickname
+    %p.text
+      = reply.text
+    .review
+      .timestamp
+        -if (Time.now - reply.created_at)/1.day < 3
+          = time_ago_in_words(reply.created_at) + "前"
+        -else
+          = reply.created_at.strftime("%Y年%m月%d日")
+  .list-btn.js-swipeListBtn.list-btn-comment
+    -if reply.user_id == current_user.id
+      %ul
+        %li
+          %a.reply-edit-btn{"data-tweetid"=>"#{@tweet.id}", "data-commentid"=>"#{reply.comment.id}", "data-replyid"=>"#{reply.id}"}
+            %span.fa.fa-edit
+        %li
+          %a.reply-delete-btn{"data-id1"=>"#{@tweet.id}", "data-id2"=>"#{reply.comment.id}", "data-id3"=>"#{reply.id}"}
+            %span.fa.fa-trash
