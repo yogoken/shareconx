@@ -3,7 +3,7 @@ Rails.application.routes.draw do
     :registrations => 'users/registrations',
     :sessions => 'users/sessions'
   }
-  root 'tweets#index'
+  root to: 'tweets#show'
   resources :welcome, only: [:index]
   resources :tweets do
     resources :violation_reports, only: [:create]
@@ -12,6 +12,10 @@ Rails.application.routes.draw do
     resources :comments do
       resources :comment_likes, only: [:create, :destroy]
       resources :replies
+    end
+    member do
+      get 'add_to_cart'
+      get 'remove_from_cart'
     end
   end
   resources :users, only: [:show, :update] do

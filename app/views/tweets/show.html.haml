@@ -3,69 +3,19 @@
     = link_to :root do
       %span.fa.fa-angle-left
   %h3
-    投稿
+    .white_color
+      注文を確定する
   -if @tweet.user_id == current_user.id
     .user_setting
-      %a.tweet_show_option_btn{"data-tweetid"=>"#{@tweet.id}"}
-        …
+      %a.tweet_show_option_btn{"data-tweetid"=>"#{@tweet.id}"}次へ
 
 .article_detaile
   %h3.title#tweetShow-tweet-edited-title
-    = @tweet.title
-  .article_menu
-    .tweet_info
-      %p.nickname
-        -if @tweet.room_id == 1
-          %span.tag{:class=>"company_color_#{@tweet.company_cd}"}
-            = @tweet.company_cd
-          = @tweet.nickname
-        -else
-          = @tweet.nickname
-      %p.timestamp
-        -if (Time.now - @tweet.created_at)/1.day < 3
-          = time_ago_in_words(@tweet.created_at) + "前"
-        -else
-          = @tweet.created_at.strftime("%Y年%m月%d日")
-    .tweet_options
-      %ul
-        %li
-          - if @tweet.tweet_violation_flg(current_user.id)
-            %span.decrement
-              %span.fa.fa-flag-o
-          - else
-            %a#tweet_report_btn{"data-tweetid"=>"#{@tweet.id}", "data-userid"=>"#{current_user.id}",  "data-tweetusername"=>"#{@tweet.nickname}", "data-tweettitle"=>"#{@tweet.title}"}
-              %span.fa.fa-flag-o
-        %li
-          - if @tweet.tweet_bookmark_user(current_user.id)
-            #tweet_bookmark_btn.decrement{"data-userid"=>"#{current_user.id}", "data-tweetid"=>"#{@tweet.id}", "data-tweetbookmarkid"=>"#{@tweet_bookmark.id}"}
-              %span.fa.fa-bookmark.bookmark_icon
-          - else
-            #tweet_bookmark_btn{"data-userid"=>"#{current_user.id}", "data-tweetid"=>"#{@tweet.id}"}
-              %span.fa.fa-bookmark-o.bookmark_icon
-
-  %p.text#tweetShow-tweet-edited-text
-    = @tweet.text
-
-  .article_review
-    .article_review_content.article_review_tweet_likes
-      - if @tweet.tweet_like_user(current_user.id)
-        #tweet_like_button.decrement{"data-tweetid"=>"#{@tweet.id}", "data-tweetlikeid"=>"#{@tweet_like.id}"}
-          %span.fa.fa-thumbs-o-up
-          %span#tweet_like_text
-            Liked
-          %span#tweet_like_sum
-            = tweet_likes_counter(@tweet_likes)
-      - else
-        #tweet_like_button{"data-tweetid"=>"#{@tweet.id}"}
-          %span.fa.fa-thumbs-o-up
-          %span#tweet_like_text
-            Like
-          %span#tweet_like_sum
-            = tweet_likes_counter(@tweet_likes)
-    .article_review_content.right
-      %a.comment-create-btn{"data-id1"=>"#{@tweet.id}"}
-        %span.fa.fa-comments-o
-        コメントする
+    = link_to image_tag(@image, class: "product_image"), 'tweets/1/add_to_cart'
+  %h3.title#tweetShow-tweet-edited-title
+    = image_tag("grape.png", class: "product2_image")
+  %h3.title#tweetShow-tweet-edited-title
+    = image_tag("sando.png", class: "product3_image")
 
 .tweet-show-comments
   #tweet-show-comment-each-displayNone.tweet-show-comment-each
@@ -220,84 +170,16 @@
       .tweet-submit-btn
         %input.tweet-submit#tweetShow-tweet-edit-submit{:type => "submit", :value => "編集する"}/
 
+// modalが出る場所。実際にここで決済をしてもらうようなviewにする
 #modal-overlay
 #tweet-show-option-modal
   .modal-contents
     .tweet-show-tweetEdit
-      %a#tweet-show-tweetEdit{"data-tweetid"=>"", "data-tweettext"=>"#{@tweet.text}", "data-tweettitle"=>"#{@tweet.title}"}
-        編集する
-    .tweet-show-tweetDelete
-      %a#tweet-show-tweetDelete{"data-tweetid"=>""}
-        削除する
+      %a#tweet-show-tweetEdit{"data-tweetid"=>""}
   .tweet-show-option-close-btn
-    キャンセル
+    = link_to '注文を確定する', '/tweets/1/finish_process', class: 'white_color'
 
 #checked-modal
   %p.check-words
   %p#countdown
     %span.countdown-num
-
-// violation report modal
-#modal-overlay
-#violation_report_modal
-  .violation_report_modal_header
-    %a.violation-report-modal-close-btn{:href => "#"}
-      閉じる
-    %p.violation-report-modal-title
-      通報する
-    %fomr#violationReportCreateForm{:action=>"", :method=>""}
-      %input.violation_report_submit{:type => "submit", :value => "通報"}/
-  .violation_report_modal_contents
-    %p.violation_report_tweet_post.top
-      投稿者：
-      %span#violation_reported_user_name
-    %p.violation_report_tweet_post
-      タイトル：
-      %span#violation_reported_tweet_title
-
-  = field_set_tag("", method: :post, id: "violation_report_create", name: "violationReportCreateForm") do
-    .violation_report_reason
-      %p.optional-message-top
-        通報理由
-      .violation_report_reason_checkbox
-        %label
-          %input#violation_report_radio_01{:type => "radio", :name => "option", :value=>"事業会社内の機密事項"}
-          事業会社内の機密事項
-      .violation_report_reason_checkbox
-        %label
-          %input#violation_report_radio_02{:type => "radio", :name => "option", :value=>"不適切な扇動"}
-          不適切な扇動
-      .violation_report_reason_checkbox
-        %label
-          %input#violation_report_radio_04{:type => "radio", :name => "option", :value=>"個人のプライバシー侵害"}
-          個人のプライバシー侵害
-      .violation_report_reason_checkbox
-        %label
-          %input#violation_report_radio_05{:type => "radio", :name => "option", :value=>"倫理的秩序に反するコンテンツ"}
-          倫理的秩序に反するコンテンツ
-      .violation_report_reason_checkbox
-        %label
-          %input#violation_report_radio_05{:type => "radio", :name => "option", :value=>"スパムや不適切な広告宣伝活動"}
-          スパムや不適切な広告宣伝活動
-      .violation_report_reason_checkbox
-        %label
-          %input#violation_report_radio_05{:type => "radio", :name => "option", :value=>"その他"}
-          その他
-      %p.optional-message
-        説明が必要な場合（任意）
-      %textarea.violation_report_reason_textarea{:name => "text", :placeholder => "詳細理由を教えてください", :rows => 4}
-
-//削除確認用モーダル
-#modal-overlay
-#modal
-  .modal-contents
-    %p 削除してよろしいですか
-  %ul.modal-btn-groupe
-    %li
-      %a.modal-close{:href => "#"}
-        %span キャンセル
-    %li
-      %a.modal-delete#delete-modal{"data-method"=> "delete", :href =>""}
-        %span 削除
-
-.tab-content-end

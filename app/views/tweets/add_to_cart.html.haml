@@ -1,0 +1,185 @@
+.page-title
+  .back_btn
+    = link_to :root do
+      %span.fa.fa-angle-left
+  %h3
+    .white_color
+      注文を確定する
+  -if @tweet.user_id == current_user.id
+    .user_setting
+      %a.tweet_show_option_btn{"data-tweetid"=>"#{@tweet.id}"}次へ
+
+.article_detaile
+  %h3.title#tweetShow-tweet-edited-title
+    = link_to image_tag(@image, class: "product_image"), add_to_cart_tweet_path
+  %h3.title#tweetShow-tweet-edited-title
+    = image_tag("grape.png", class: "product2_image")
+  %h3.title#tweetShow-tweet-edited-title
+    = image_tag("sando.png", class: "product3_image")
+
+.tweet-show-comments
+  #tweet-show-comment-each-displayNone.tweet-show-comment-each
+    .list.js-swipeList
+      .list-body.js-swipeListTarget.comments_detail
+        %p.nickname
+          -if @tweet.room_id != current_user.company_id
+            %span.tag{:class=>""}
+          %span.comment-nicknames
+        %p.text
+        .review
+          .timestamp
+
+          .dots
+            ・
+          .likes
+            .comment_like_button
+              %a.momentCreateBtn
+                %span.fa.fa-thumbs-o-up
+                %span
+                  Like
+                %span
+                  0
+          .dots
+            ・
+          .comments
+            %a.reply-create-btn
+              %span.fa.fa-comments-o
+              返信する
+
+      .list-btn.js-swipeListBtn.list-btn-comment
+        %ul
+          %li
+            %a.comment-edit-btn{"data-method"=> "get", :href=>""}
+              %span.fa.fa-edit
+          %li
+            %a.comment-delete-btn{"data-id1"=>"", "data-id2"=>""}
+              %span.fa.fa-trash
+  =render @feed_contents
+
+//コメント・返信作成用のモーダル機能を追加する
+// コメント作成モーダル
+#modal-overlay
+#comment-create-modal
+  .comment-create-modal-header
+    .likes-counts
+      この投稿のいいね数：
+      %span.fa.fa-thumbs-o-up
+      %span#comment-create-tweet-like
+        = tweet_likes_counter(@tweet_likes)
+      人
+    %a.comment-create-close-btn{:href => "#"}
+      閉じる
+  .comment-create-modal-contents
+    #least_comment_dispNone
+      %p.comment_text
+        -# = comment.text
+      %p.comment_user_nickname
+        -# = comment.user_nickname
+        %span.timestamp
+
+    - @least_comments.each do |comment|
+      .least_comment
+        %p.comment_text
+          = comment.text
+        %p.comment_user_nickname
+          = comment.user_nickname
+          %span.timestamp
+            ・
+            -if (Time.now - comment.created_at)/1.day <= 1
+              = time_ago_in_words(comment.created_at) + "前"
+            -else
+              = comment.created_at.strftime("%Y年%m月%d日")
+
+  .comments_form
+    = form_tag("/tweets/#{@tweet.id}/comments", method: :post, id: "comment-create", name: "commentCreateForm") do
+      .comment-text-area
+        %textarea.comment-text#comment-text{:name => "text", :placeholder => "コメントする...", required: "true", autofocus: "true"}
+      .comment-submit-btn
+        %input.comment-submit{:type => "submit", :value => "投稿する"}/
+
+// 返信作成モーダル
+#modal-overlay
+#reply-create-modal
+  .reply-create-modal-header
+    .likes-counts
+      このコメントのいいね数：
+      %span.fa.fa-thumbs-o-up
+      %span#reply-create-comment-like
+        0
+      人
+    %a.reply-create-close-btn{:href => "#"}
+      閉じる
+  .reply-create-modal-contents
+    %p.comment-text#reply-create-comment-text
+    %p.right-allign
+      %span.comment-nickname#reply-create-comment-nickname
+      %span
+        さんのコメント
+  .replies_form
+    = form_tag("", method: :post, id: "reply-create", name: "replyCreateForm") do
+      .reply-text-area
+        %textarea.reply-text#reply-text{:name => "text", :placeholder => "このコメントに返信する...", required: "true", autofocus: "true"}
+      .reply-submit-btn
+        %input.reply-submit{:type => "submit", :value => "返信する"}/
+
+//コメント編集モーダル
+#modal-overlay
+#comment-edit-modal
+  .comment-edit-modal-header
+    .likes-counts
+      コメントを編集
+    %a.comment-edit-close-btn{:href => "#"}
+      閉じる
+  .replies_form
+    = form_tag("", method: :patch, id: "comment-edit") do
+      .reply-text-area
+        %textarea.reply-text#comment-edit-text{:name => "text", type: "text", required: "true", rows: "5", autofocus: "true"}
+      .reply-submit-btn
+        %input.reply-submit#comment-edit-submit{:type => "submit", :value => "編集する"}/
+
+//返信編集モーダル
+#modal-overlay
+#reply-edit-modal
+  .reply-edit-modal-header
+    .likes-counts
+      返信を編集
+    %a.reply-edit-close-btn{:href => "#"}
+      閉じる
+  .replies_form
+    = form_tag("", method: :patch, id: "reply-edit") do
+      .reply-text-area
+        %textarea.reply-text#reply-edit-text{:name => "text", type: "text", required: "true", rows: "5", autofocus: "true"}
+      .reply-submit-btn
+        %input.reply-submit#reply-edit-submit{:type => "submit", :value => "編集する"}/
+
+// tweet-show ツイート編集モーダル
+#modal-overlay
+#tweetShow-tweet-edit-modal
+  .tweetShow-tweet-edit-modal-header
+    .likes-counts
+      ツイートを編集
+    %a.tweetShow-tweet-edit-close-btn{:href => "#"}
+      閉じる
+  .replies_form
+    = form_tag("", method: :patch, id: "tweetShow-tweet-edit") do
+      .tweet-text-area
+        %h4 タイトル
+        %textarea.tweet-text#tweetShow-tweet-edit-title{:name => "title", type: "text", required: "true", rows: "2", autofocus: "true"}
+        %h4 コンテンツ
+        %textarea.tweet-text#tweetShow-tweet-edit-text{:name => "text", type: "text", required: "true", rows: "5"}
+      .tweet-submit-btn
+        %input.tweet-submit#tweetShow-tweet-edit-submit{:type => "submit", :value => "編集する"}/
+
+// modalが出る場所。実際にここで決済をしてもらうようなviewにする
+#modal-overlay
+#tweet-show-option-modal
+  .modal-contents
+    .tweet-show-tweetEdit
+      %a#tweet-show-tweetEdit{"data-tweetid"=>""}
+  .tweet-show-option-close-btn
+    = link_to '注文を確定する', '/tweets/1/finish_process', class: 'white_color'
+
+#checked-modal
+  %p.check-words
+  %p#countdown
+    %span.countdown-num

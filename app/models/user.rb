@@ -14,10 +14,10 @@ class User < ActiveRecord::Base
   has_many :bookmarks, dependent: :destroy
   has_many :violation_reports
 
- validates :email,
-    :format => {
-      :with => /(r\.recruit\.co\.jp|waku\-2\.co\.jp)/,
-      :message => 'は社用メールを利用してください。'},
-    :presence => true
+ # validates :email,
+ #    :format => {
+ #      :with => /(r\.recruit\.co\.jp|waku\-2\.co\.jp)/,
+ #      :message => 'は社用メールを利用してください。'},
+ #    :presence => true
   validates :nickname, :presence => true
 end

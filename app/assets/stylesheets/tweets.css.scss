@@ -13,8 +13,19 @@ $grey-light: #e3e3e3;
 $grey: #e5e5e5;
 $grey-dark: #b9b9b9;
 
+.white_color{
+  color: white;
+}
+
+.finish_process{
+  height: 10px;
+  width: 10px;
+/*  background: url('finish_process.png') no-repeat;
+  background-size: cover;
+*/}
+
 .multipletab{
-  margin:0 auto;
+  margin: 0 auto;
   background: $grey-lightest;
   overflow: hidden;
   position: relative;
@@ -205,52 +216,33 @@ $grey-dark: #b9b9b9;
 }
 
 .article_detaile{
-  padding: 30px 20px;
+  height: 70px;
+  width: 100px;
   background-color: #fff;
-  margin: 0px 0 15px;
-  box-shadow: 0 1px 1px rgba($accent-color,0.2);
-  overflow-y: scroll;
   h3.title{
     margin: 0;
   }
-  .article_menu{
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #ddd;
-    .tweet_info{
-      p.nickname{
-        margin: 15px 0 0;
-        padding: 0;
-        font-size: 12px;
-        color: $main-color;
-      }
-      p.timestamp{
-        margin: 5px 0;
-        padding: 0 0 15px;
-        font-size: 12px;
-        color: $gray-lv2;
-      }
-    }
-    .tweet_options{
-      display: flex;
-      align-items: center;
-      font-size: 20px;
-      ul{
-        margin: 0;
-        li{
-          float: left;
-          list-style: none;
-          padding: 0 15px 0 20px;
-          color: #666;
-          a#tweet_report_btn{
-            color: #666;
-          }
-          .decrement{
-            color: rgb(255, 134, 134);
-          }
-        }
-      }
-    }
+
+  .product_image{
+    height: 138px;
+    width: 138px;
+    float: left;
+  }
+  .product2_image{
+    position: absolute;
+    height: 138px;
+    width: 138px;
+  }
+  .product3_image{
+    position: absolute;
+    height: 138px;
+    width: 138px;
+    padding: 0px 0px 0px 138px;
+  }
+  .product4_image{
+    float: left;
+    height: 138px;
+    width: 138px;
   }
 
   p.text {
@@ -522,7 +514,7 @@ fieldset#violation_report_create{
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-  font-size: 22px;
+  font-size: 20px;
   .modal-contents{
     background-color: #fafafa;
     border: 1px solid #999;
@@ -532,25 +524,26 @@ fieldset#violation_report_create{
       text-decoration: none;
     }
     .tweet-show-tweetEdit{
-      padding: 15px;
+      padding: 105px;
+      background: url("payment.png") no-repeat;
+      background-size: cover;
       a{
         color: #666;
       }
     }
-    .tweet-show-tweetDelete{
+/*    .tweet-show-tweetDelete{
       padding: 15px;
       border-top: 1px solid #999;
       a{
         color: rgb(255, 98, 98);
       }
-    }
+    }*/
   }
   .tweet-show-option-close-btn{
-    color: #666;
-    padding: 15px;
-    background-color: #fafafa;
-    border: 1px solid #999;
-    border-radius: 15px;
+    color: white;
+    background-color: #FBD966;
+    border: 1px solid #FBD966;
+    border-radius: 5px;
     margin-bottom: 10px;
   }
 }
